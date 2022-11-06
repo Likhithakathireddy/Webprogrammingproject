@@ -42,7 +42,7 @@ export default class changepassword extends Component{
             .then((data) => {
               console.log(data, "userRegister");
               if (data.status == "ok") {
-               alert("Password Changed Successfully !!"); 
+               alert(""); 
                window.location.href = "./home"
               }else if (data.status == "error2"){
                 alert("Current Password is wrong"); 

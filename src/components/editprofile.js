@@ -94,7 +94,7 @@ constructor(props){
                            </div>
                            <div class="form-group">
                               <label>Phone Number</label>
-                              <input type="number" name="phonenumber"  class="form-control" placeholder={phonenumber} onChange={(e)=>this.setState({phonenumber: e.target.value})}/>
+                              <input type="text" name="phonenumber"  class="form-control" placeholder={phonenumber} onChange={(e)=>this.setState({phonenumber: e.target.value})}/>
                            </div>
                 
                            <div class="col-md-12 text-center mb-3">

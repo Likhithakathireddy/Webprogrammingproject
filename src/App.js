@@ -10,15 +10,19 @@ import Header from "./components/header";
 import Viewprofile from "./components/viewprofile";
 import Homepage from "./components/homepage";
 import Otp from "./components/otp";
+import SearchE from "./components/search";
+import Insert from "./components/insert";
+import Showless from "./components/showless";
 
 function App() {
   return (
     <Router>
       <div className="App">
 
-        <Header />
+        <Header/>
             <Routes>
-              <Route exact path="/" element={<Login />} />
+              <Route exact path="/" element={<SearchE />} />
+              <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/forgotpassword" element={<Forgotpassword />} />
               <Route path="/editprofile" element={<Editprofile />} />
@@ -26,7 +30,8 @@ function App() {
               <Route path="/viewprofile" element={<Viewprofile />} />
               <Route path="/home" element={<Homepage />} />
               <Route path="/otp" element={<Otp />} />
-            
+              <Route path="/insert" element={<Insert/>}/>
+              <Route path="/showless" element={<Showless/>}/>
 
             </Routes>
       </div>
