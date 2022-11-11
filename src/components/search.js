@@ -1,13 +1,43 @@
 import React, { Component } from "react";
+import { Pagination } from "react-bootstrap";
+
 import "./css/login.css";
+export const _getText = (text, filterName) => (filterName ? _getTextWithHighlights(text, filterName) : text);
+
+  export const doStringFormatting = (str = '') => {
+  const regex2 = new RegExp("\\[\\'", 'gi');
+  const regex3 = /']/gi;
+  const regex4 = /"]/gi;
+  const regex5 = new RegExp('\\[\\"', 'gi');
+  str = str.replace(regex2, '');
+  str = str.replace(regex3, '');
+  str = str.replace(regex4, '');
+  str = str.replace(regex5, '');
+  return str;
+}
+
+export const _getTextWithHighlights = (text, searchText) => {
+  const regex1 = new RegExp(searchText, 'gi');
+  let newText = text?.replace(regex1, `<mark class="highlight">$&</mark>`);
+
+  newText = doStringFormatting(newText)
+  
+  return <span dangerouslySetInnerHTML={{ __html: newText }} />;
+};
 export default class SearchE extends Component {
   constructor(props) {
     super(props);
     this.state = {
       userData: "",
       searchTerm: "",
+      searchList: [],
+      count: null,
+      currentPageItems: [],
+      active: 1,
     };
     this.searchElastic = this.searchElastic.bind(this);
+    // this.handleCurrentPageItems = this.handleCurrentPageItems.bind(this);
+    this.pagination = this.pagination.bind(this);
   }
   componentDidMount() {
     fetch("http://localhost:5000/userData", {
@@ -48,11 +78,55 @@ export default class SearchE extends Component {
       .then((res) => res.json())
       .then((data) => {
         console.log(data, "userData");
-        this.setState({ searchList: data });
+        this.setState({ searchList: data.results, count: data.count });
       });
   }
 
+  // handleCurrentPageItems(currentPageItems) {
+  //   this.setState({
+  //     currentPageItems,
+  //   });
+
+  //   this.setState((prev) => ({ ...prev, activePage: pageNumber }));
+  // }
+
+  pagination(number) {
+    this.setState({
+      active: number,
+    });
+    // axios
+    //   .get(
+    //     "https://rickandmortyapi.com/api/episode/" +
+    //       totalEpis.slice(indOfFirstEpi, indOfLastEpi)
+    //   )
+    //   .then(data => {
+    //     setEpi(data.data);
+    //   });
+  }
+
   render() {
+    let { active } = this.state;
+    let pages = [];
+    let numOfETDSperPage = 5;
+    let etds = this.state?.searchList;
+    let currentPageItems = etds.slice(
+      (active - 1) * numOfETDSperPage,
+      (active - 1) * numOfETDSperPage + numOfETDSperPage
+    );
+
+    console.log({ etds, currentPageItems, active });
+    for (let number = 1; number <= Math.ceil(etds.length / numOfETDSperPage); number++) {
+      pages.push(
+        <Pagination.Item
+          key={number}
+          active={number === active}
+          onClick={() => this.pagination(number)}
+        >
+          {number}
+        </Pagination.Item>
+      );
+    }
+
     return (
       <div class="container">
         <div class="mb-5 row">
@@ -111,48 +185,66 @@ export default class SearchE extends Component {
             </div>
           </div>
         </div>
+        <p>Total no of etds :- {this.state.count} </p>
         <div class="container">
-          <ul class="list-group ">
-            {this.state.searchList?.map((etd) => {
-              let { title,author, university, year,text } = etd._source;
-              console.log(etd._source)
-              return (
-                <li class="list-group-item">
-                  <p class="mb-1 text-start">Title: {title}</p>
-                  <p class="mb-1 text-start">Author: {author}</p>
-                  <p class="mb-1 text-start ">University: {university}</p>
-                  <p class="mb-1 text-start">Year: {year}</p>
-                  <p class="mb-1 text-start">Abstract: {text}</p>
-
-                </li>
-              );
-            })}
+          <ul class="list-group">
+            {currentPageItems?.map((etd) => (
+              <SearchItem etd={etd} searchTerm={this.state.searchTerm} />
+            ))}
           </ul>
-
-          {this.state?.searchList?.length > 0 && (
-            <nav aria-label="Page navigation example" className="mt-3">
-              <ul class="pagination">
-                <li class="page-item">
-                  <a class="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                  </a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">
-                    1
-                  </a>
-                </li>
-
-                <li class="page-item">
-                  <a class="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          )}
         </div>
+        {currentPageItems?.length > 0 && (
+          <>
+            Showing {(active - 1) * numOfETDSperPage} - {(active - 1) * numOfETDSperPage + numOfETDSperPage} of {etds.length}
+            <Pagination size="sm">
+              <Pagination.Prev />
+              {pages}
+              <Pagination.Next />
+            </Pagination>
+          </>
+        )}
       </div>
     );
   }
 }
+
+const SearchItem = ({ etd, searchTerm }) => {
+  // console.log(etd._source);
+
+  const textStyle = {
+    maxWidth: "100%",
+    display: "-webkit-box",
+    WebkitBoxOrient: "vertical",
+    WebkitLineClamp: 3,
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  };
+
+  const [truncate, setToggleTruncate] = React.useState(true);
+
+  // This function toggles the state variable 'truncate', thereby expanding and truncating the text every time the user clicks the div.
+  function toggleTruncate() {
+    setToggleTruncate(!truncate);
+  }
+  let { title, author, university, year, text } = etd._source;
+  <div>
+    <p class="mb-1 text-start" onClick={SearchItem}>
+      The Total number of search iteams are{" "}
+    </p>
+  </div>;
+  return (
+    <li class="list-group-item">
+      <p class="mb-1 text-star">Title: {_getText(title, searchTerm)}</p>
+      <p class="mb-1 text-start">Author: {author}</p>
+      <p class="mb-1 text-start">University: {university}</p>
+      <p class="mb-1 text-start">Year: {year}</p>
+      <p class="mb-1 text-start" style={truncate ? textStyle : null}>
+        Abstract: {_getText(text, searchTerm)}
+      </p>
+      <a class="mb-1 text-start" onClick={toggleTruncate}>
+        {truncate ? "show more" : "show less"}
+      </a>
+    </li>
+  );
+  
+};

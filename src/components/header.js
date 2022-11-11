@@ -102,16 +102,3 @@ export default class header extends Component {
     );
   }
 }
-<nav class="nav nav-2">
-  <a class="nav-logo" href="#">
-    Logo
-  </a>
-  <ul class="nav-list">
-    <li>
-      <a href="/login">Login</a>
-    </li>
-    <li>
-      <a href="/signup">SignUp</a>
-    </li>
-  </ul>
-</nav>;

@@ -62,4 +62,7 @@
       form .error {
      color: #ff0000;
      }
+     p.thick {
+      font-weight: bold;
+    }
      

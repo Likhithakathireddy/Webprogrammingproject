@@ -45,7 +45,6 @@ export default class InsertETD extends Component {
       this.state.selectedFile.name
     );
     formData.append("title", title);
-    formData.append("sourceurl", sourceurl);
     formData.append("author", author);
 
     formData.append("abstract", abstract);
@@ -57,12 +56,6 @@ export default class InsertETD extends Component {
 
     fetch("http://localhost:5000/upload", {
       method: "POST",
-      crossDomain: true,
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
       body: formData,
     })
       .then((res) => res.json())
@@ -106,7 +99,12 @@ export default class InsertETD extends Component {
                     <h1>Insert</h1>
                   </div>
                 </div>
-                <form onSubmit={(e) => e.preventDefault()}>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    this.handleSubmit();
+                  }}
+                >
                   <div class="form-group">
                     <label>Title :</label>
                     <input
@@ -117,7 +115,7 @@ export default class InsertETD extends Component {
                       required
                     />
                   </div>
-                  <div class="form-group">
+                  {/* <div class="form-group">
                     <label>SourceURL :</label>
                     <input
                       type="text"
@@ -128,7 +126,7 @@ export default class InsertETD extends Component {
                       }
                       required
                     />
-                  </div>
+                  </div> */}
                   <div class="form-group">
                     <label>Author :</label>
                     <input
@@ -181,7 +179,7 @@ export default class InsertETD extends Component {
                     <label>Department :</label>
                     <input
                       type="text"
-                      name="phonenumber"
+                      name="Department"
                       className="form-control"
                       onChange={(e) =>
                         this.setState({ department: e.target.value })
@@ -212,19 +210,11 @@ export default class InsertETD extends Component {
                   </div>
 
                   <div class="col-md-3 text-center mb-3 d-flex">
-                    <button
-                      type="submit"
-                      className="btn btn-secondary"
-                      onClick={this.handleSubmit}
-                    >
+                    <button type="submit" className="btn btn-secondary">
                       Close
                     </button>
-                  
-                    <button
-                      type="submit"
-                      className="btn btn-primary ms-3 "
-                      onClick={this.handleSubmit}
-                    >
+
+                    <button type="submit" className="btn btn-primary ms-3 ">
                       Insert
                     </button>
                   </div>

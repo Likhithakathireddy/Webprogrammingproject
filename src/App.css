@@ -37,17 +37,18 @@
   }
 }
 .Nav {
-  grid-area:nav;
-  display:grid;
-  grid-template-columns: repeat(4,auto);
-  align-items:center;
-  justify-items:center;
+  grid-area: nav;
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  align-items: center;
+  justify-items: center;
 }
 .buttons {
   width: 960px;
-  margin: 0 auto;}
-  
-      .action_btn {
+  margin: 0 auto;
+}
+
+.action_btn {
   width: 500px;
   margin: 0 auto;
 }

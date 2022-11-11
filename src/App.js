@@ -12,28 +12,24 @@ import Homepage from "./components/homepage";
 import Otp from "./components/otp";
 import SearchE from "./components/search";
 import Insert from "./components/insert";
-import Showless from "./components/showless";
 
 function App() {
   return (
     <Router>
       <div className="App">
-
-        <Header/>
-            <Routes>
-              <Route exact path="/" element={<SearchE />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/forgotpassword" element={<Forgotpassword />} />
-              <Route path="/editprofile" element={<Editprofile />} />
-              <Route path="/changepassword" element={<Changepassword />} />
-              <Route path="/viewprofile" element={<Viewprofile />} />
-              <Route path="/home" element={<Homepage />} />
-              <Route path="/otp" element={<Otp />} />
-              <Route path="/insert" element={<Insert/>}/>
-              <Route path="/showless" element={<Showless/>}/>
-
-            </Routes>
+        <Header />
+        <Routes>
+          <Route exact path="/" element={<SearchE />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/forgotpassword" element={<Forgotpassword />} />
+          <Route path="/editprofile" element={<Editprofile />} />
+          <Route path="/changepassword" element={<Changepassword />} />
+          <Route path="/viewprofile" element={<Viewprofile />} />
+          <Route path="/home" element={<Homepage />} />
+          <Route path="/otp" element={<Otp />} />
+          <Route path="/insert" element={<Insert />} />
+        </Routes>
       </div>
     </Router>
   );

@@ -89,7 +89,7 @@ export default class homepage extends Component {
           </div>
         </div>
         
-        <div class="container">
+        {/* <div class="container">
           {this.state.searchList?.map((etd) => {
             let {author, university, year} = etd._source;
             return (
@@ -100,7 +100,7 @@ export default class homepage extends Component {
               </div>
             );
           })}
-        </div>
+        </div> */}
       </div>
     );
   }
