@@ -1,91 +1,126 @@
 import React, { Component } from "react";
-import axios from "axios";
+// import axios from "axios";
 // import "./css/login.css"
 
 export default class InsertETD extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      firstname: "",
-      lastname: "",
-      email: "",
-      phonenumber: "",
-      password: "",
-      selectedFile: "",
-    };
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
+  // handleSubmit() {
+  //   const {
+  //     title,
+  //     sourceurl,
+  //     author,
+  //     abstract,
+  //     publisher,
+  //     subject,
+  //     department,
+  //     degree,
+  //   } = this.state;
+  //   console.log(
+  //     title,
+  //     sourceurl,
+  //     author,
+  //     abstract,
+  //     publisher,
+  //     subject,
+  //     department,
+  //     degree
+  //   );
 
-  handleSubmit() {
-    const {
-      title,
-      sourceurl,
-      author,
-      abstract,
-      publisher,
-      subject,
-      department,
-      degree,
-    } = this.state;
-    console.log(
-      title,
-      sourceurl,
-      author,
-      abstract,
-      publisher,
-      subject,
-      department,
-      degree
-    );
+  //   const formData = new FormData();
+  //   formData.append(
+  //     "myFile",
+  //     this.state.selectedFile,
+  //     this.state.selectedFile.name
+  //   );
+  //   formData.append("title", title);
+  //   formData.append("author", author);
 
+  //   formData.append("abstract", abstract);
+
+  //   formData.append("publisher", publisher);
+  //   formData.append("subject", subject);
+  //   formData.append("department", department);
+  //   formData.append("degree", degree);
+
+  //   fetch("http://localhost:5000/upload", {
+  //     method: "POST",
+  //     body: formData,
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       console.log(data, "userRegister");
+  //       if (data.status === "ok") {
+  //         <div class ="alert-alert-success" role="alert">
+  //           <h4 class="alert-heading">Well done!</h4>
+  //           <hr>
+  //           <p class="mb-0">Uploaded file  Successfully !
+  //             </p>
+  //             </hr>
+  //         </div>
+  //         window.location.href = "/";
+  //       } else {
+  //         <div class ="alert-alert-success" role="alert">
+  //           <h4 class="alert-heading">Error!</h4>
+  //           <hr>
+  //           <p class="mb-0">Unable to upload file,try again after some time
+  //             </p>
+  //             </hr>
+  //         </div>
+  //       }
+  //     });
+  // } 
+  handleClick(event) {
+    event.preventDefault();
+    const { advisor, author, degree, program, title, university, year, text, file } = this.state;
+    const count = window.localStorage.getItem('count');
+    const etd_file_id= (parseInt(count) +1);
+    const pdf = file.name;
+    console.log( etd_file_id, advisor, author, degree, program, title, university, year, text, pdf );
     const formData = new FormData();
-    formData.append(
-      "myFile",
-      this.state.selectedFile,
-      this.state.selectedFile.name
-    );
-    formData.append("title", title);
-    formData.append("author", author);
-
-    formData.append("abstract", abstract);
-
-    formData.append("publisher", publisher);
-    formData.append("subject", subject);
-    formData.append("department", department);
-    formData.append("degree", degree);
-
+    formData.append("file",file);
+    
+   
     fetch("http://localhost:5000/upload", {
       method: "POST",
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data, "userRegister");
-        if (data.status === "ok") {
-          alert("User Registered Successfully");
-          window.location.href = "/";
-        } else {
-          alert("User failed Registered ");
-        }
-      });
-  }
+      body : formData,
+    }).then((res) => {
+      console.log(formData)
+       console.log(res);})
 
-  onFileChange = (event) => {
-    this.setState({ selectedFile: event.target.files[0] });
-  };
-  // when user uploads file this function should execute
-  onFileUpload = () => {
-    const formData = new FormData();
-    formData.append(
-      "myFile",
-      this.state.selectedFile,
-      this.state.selectedFile.name
-    );
-    // console log uploaded file details
-    console.log("formData", formData);
-    // user send req to the server
-    // axios.post("api/uploadfile", formData);
-  };
+
+    fetch("http://localhost:5000/insert", {
+      method: "POST",
+      crossDomain: true,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        etd_file_id, 
+        advisor, 
+        author, 
+        degree, 
+        program, 
+        title, 
+        university, 
+        year, 
+        text,
+        pdf
+      }),
+    }).then((res) => {
+    console.log(res);
+    if (res.status === 200) {
+      alert("Inserted Successfully") ;
+      window.localStorage.setItem("count",etd_file_id);
+      window.open("./")
+      }else{
+        alert("Inserted Failed") 
+      }});
+    }
 
   render() {
     return (
@@ -99,104 +134,87 @@ export default class InsertETD extends Component {
                     <h1>Insert</h1>
                   </div>
                 </div>
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    this.handleSubmit();
-                  }}
-                >
-                  <div class="form-group">
-                    <label>Title :</label>
+                <form>
+                     <div class="form-group">
+                    <label>Advisor :</label>
                     <input
                       type="text"
-                      name="fname"
-                      className="form-control"
-                      onChange={(e) => this.setState({ title: e.target.value })}
-                      required
-                    />
-                  </div>
-                  {/* <div class="form-group">
-                    <label>SourceURL :</label>
-                    <input
-                      type="text"
-                      name="url"
                       className="form-control"
                       onChange={(e) =>
-                        this.setState({ sourceurl: e.target.value })
+                        this.setState({ advisor: e.target.value })
                       }
-                      required
+                      
                     />
-                  </div> */}
+                  </div>
                   <div class="form-group">
                     <label>Author :</label>
                     <input
                       type="text"
-                      name="Author"
                       className="form-control"
                       onChange={(e) =>
                         this.setState({ author: e.target.value })
                       }
-                      required
+                      
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label>Degree:</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      onChange={(e) =>
+                        this.setState({ degree: e.target.value })
+                      }
+                      
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label>Program:</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      onChange={(e) =>
+                        this.setState({ program: e.target.value })
+                      }
+                      
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label>Title :</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      onChange={(e) => this.setState({ title: e.target.value })}
+                      
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label>University:</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      onChange={(e) => this.setState({  university: e.target.value })}
+                      
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label>Year Published:</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      onChange={(e) => this.setState({ year: e.target.value })}
+                      
                     />
                   </div>
                   <div class="form-group">
                     <label>Abstract :</label>
                     <input
                       type="text"
-                      name="abstract"
                       className="form-control"
                       onChange={(e) =>
                         this.setState({ abstract: e.target.value })
                       }
-                      required
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label>Publisher :</label>
-                    <input
-                      type="text"
-                      name="publisher"
-                      className="form-control"
-                      onChange={(e) =>
-                        this.setState({ publisher: e.target.value })
-                      }
-                      required
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label>Subject :</label>
-                    <input
-                      type="text"
-                      name="Subject"
-                      className="form-control"
-                      onChange={(e) =>
-                        this.setState({ subject: e.target.value })
-                      }
-                      required
-                    />
-                  </div>
-                  <div class="form-group">
-                    <label>Department :</label>
-                    <input
-                      type="text"
-                      name="Department"
-                      className="form-control"
-                      onChange={(e) =>
-                        this.setState({ department: e.target.value })
-                      }
-                      required
-                    />
-                  </div>
-                  <div class="form-group mb-3">
-                    <label>Degree :</label>
-                    <input
-                      type="text"
-                      name="Degree"
-                      className="form-control"
-                      onChange={(e) =>
-                        this.setState({ degree: e.target.value })
-                      }
-                      required
+                      
                     />
                   </div>
                   <div class="mb-3">
@@ -205,18 +223,18 @@ export default class InsertETD extends Component {
                       required
                       type="file"
                       name="file"
-                      onChange={this.onFileChange}
+                      onChange={(e) => this.setState({ file: e.target.files[0] })}
+                      // onChange={this.onFileChange}
                     />
                   </div>
 
                   <div class="col-md-3 text-center mb-3 d-flex">
-                    <button type="submit" className="btn btn-secondary">
+                    <a href="/" type="submit" class="btn btn-secondary">
                       Close
-                    </button>
-
-                    <button type="submit" className="btn btn-primary ms-3 ">
+                    </a>
+                    <a type="button" class="btn btn-primary ms-3" onClick={this.handleClick}>
                       Insert
-                    </button>
+                    </a>
                   </div>
                 </form>
               </div>

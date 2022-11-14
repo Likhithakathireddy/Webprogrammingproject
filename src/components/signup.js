@@ -81,8 +81,8 @@ export default class signup extends Component{
                               <label >Password</label>
                               <input type="password" name="password" className="form-control" placeholder="Enter Password" onChange={(e) => this.setState({password: e.target.value })} required/>
                            </div>
-                           <div class="col-md-12 text-center mb-3">
-                              <button type="submit" className=" btn-primary" onClick={this.handleSubmit}>SignUp</button>
+                           <div class="col-md-12 text-center mb-1">
+                              <button type="submit" className=" btn-btn-primary" onClick={this.handleSubmit}>SignUp</button>
                            </div>
                            <div class="col-md-12 ">
                               <div class="form-group">

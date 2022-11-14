@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Pagination } from "react-bootstrap";
+import {Link} from "react-router-dom";
 
 import "./css/login.css";
 export const _getText = (text, filterName) => (filterName ? _getTextWithHighlights(text, filterName) : text);
@@ -61,7 +62,29 @@ export default class SearchE extends Component {
         window.localStorage.setItem("fname", data.data.fname);
         window.localStorage.setItem("phonenumber", data.data.phonenumber);
       });
+      
+      const title = window.localStorage.getItem("title");
+      if(title){
+          
+    fetch("http://localhost:5000/search?search=" + title, {
+      method: "GET",
+      crossDomain: true,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data, "userData");
+        this.setState({ searchList: data.results, count: data.count });
+        window.localStorage.setItem("title", this.state.searchTerm);
+
+      });
   }
+      }
+
 
   searchElastic() {
     console.log(this.state);
@@ -79,8 +102,11 @@ export default class SearchE extends Component {
       .then((data) => {
         console.log(data, "userData");
         this.setState({ searchList: data.results, count: data.count });
+        window.localStorage.setItem("title", this.state.searchTerm);
+
       });
   }
+
 
   // handleCurrentPageItems(currentPageItems) {
   //   this.setState({
@@ -107,7 +133,7 @@ export default class SearchE extends Component {
   render() {
     let { active } = this.state;
     let pages = [];
-    let numOfETDSperPage = 5;
+    let numOfETDSperPage = 7;
     let etds = this.state?.searchList;
     let currentPageItems = etds.slice(
       (active - 1) * numOfETDSperPage,
@@ -135,18 +161,20 @@ export default class SearchE extends Component {
               <div class="logo mb-3">
                 <div class="text-center">
                   {this.state.userData.fname && (
-                    <h5>Welcome {this.state.userData.fname}!!!</h5>
+                    <h5>Welcome to Digital  library  {this.state.userData.fname}</h5>
                   )}
                 </div>
               </div>
               {/* <form> */}
-              <label for="exampleInputEmail1">Search Digital Library</label>
+              <div class ="fw-bold"><label for="exampleInputEmail1">Search Digital Library</label></div>
+
 
               <div class="d-flex mb-3 align-items-end">
                 <div class="form-group col-md-10">
                   <input
                     class="form-control"
                     type="text"
+                    placeholder="What are you looking for?"
                     onChange={(e) => {
                       this.setState({ searchTerm: e.target.value });
                     }}
@@ -158,8 +186,9 @@ export default class SearchE extends Component {
                   {/* <button href="/homepage" class=" btn btn-block mybtn btn-primary tx-tfm">Search</button> */}
                   <p class="text-center mb-0 mt-2">
                     <a
-                      onClick={this.searchElastic}
-                      class="btn btn-primary"
+                      onClick= {this.searchElastic}
+          
+                      class=" btn btn-primary "
                       tabIndex="0"
                     >
                       Search
@@ -171,12 +200,12 @@ export default class SearchE extends Component {
                 <div class="text-center">
                   <a
                     href="/insert"
-                    class="btn btn-primary"
+                    class=" btn btn-primary "
                     type="button"
                     value="Cancel"
                     tabIndex="0"
                   >
-                    Insert Enter
+                    Insert Entries
                   </a>
                   <p></p>
                 </div>
@@ -185,7 +214,7 @@ export default class SearchE extends Component {
             </div>
           </div>
         </div>
-        <p>Total no of etds :- {this.state.count} </p>
+        <p class="fw-bold">The total number of search items {this.state.count} </p>
         <div class="container">
           <ul class="list-group">
             {currentPageItems?.map((etd) => (
@@ -229,22 +258,68 @@ const SearchItem = ({ etd, searchTerm }) => {
   let { title, author, university, year, text } = etd._source;
   <div>
     <p class="mb-1 text-start" onClick={SearchItem}>
-      The Total number of search iteams are{" "}
+      The Total number of search items are{" "}
     </p>
   </div>;
   return (
-    <li class="list-group-item">
-      <p class="mb-1 text-star">Title: {_getText(title, searchTerm)}</p>
-      <p class="mb-1 text-start">Author: {author}</p>
-      <p class="mb-1 text-start">University: {university}</p>
-      <p class="mb-1 text-start">Year: {year}</p>
-      <p class="mb-1 text-start" style={truncate ? textStyle : null}>
-        Abstract: {_getText(text, searchTerm)}
-      </p>
-      <a class="mb-1 text-start" onClick={toggleTruncate}>
+    <div class="container">
+      <li class="mb-3 list-group-item">
+    <dl class="row">
+  
+
+      <Link to={"/summary/"} state={{searchres:etd._source}} >
+      <a class="btn btn-link  text-uppercase">{_getText(title, searchTerm)}</a>
+      </Link>
+     
+      <dt class="col-sm-2"> Author(s) </dt>
+      <dd class="col-sm-10">
+      <p class= "mb-1 text-left">{author}</p>
+      </dd>
+
+      <dt class="col-sm-2"> University </dt>
+      <dd class="col-sm-10 mb-1 text-left">{university}</dd>
+      <dt class="col-sm-2"> Year </dt>
+      <dd class="col-sm-10"><p class=" mb-1 text-left">{year}</p></dd>
+
+      <dt class="col-sm-2"> Abstract </dt> 
+      <dd class=" col-sm-10 mb-1 text-left" style={truncate ? textStyle : null}>
+       {_getText(text, searchTerm)}
+      </dd>
+      <a class="mb-1 text-left" onClick={toggleTruncate}>
         {truncate ? "show more" : "show less"}
       </a>
+
+    </dl>
     </li>
+    </div>
+
+
+// <div class="container">
+// <dl class="row">
+//   <dt class="mb-1 text-center text-uppercase">{state.searchres.title}</dt>
+
+//   <dt class="col-sm-3">Author(s)</dt>
+//   <dd class="col-sm-9"> 
+//    <p class="mb-1 text-center"> {state.searchres.author}</p>
+//    </dd>
+
+//   <dt class="col-sm-3">University</dt>
+//   <dd class="col-sm-9">
+//   <p class="mb-1 text-center ">{state.searchres.university}</p>
+//   </dd>
+
+//   <dt class="col-sm-3">Year Published</dt>
+//   <dd class="col-sm-9">
+//   <p class="mb-1 text-center ">{state.searchres.year}</p>
+//   </dd>
+
+//   <dt class="mb-1 text-center">Abstract</dt>
+//   <dd class="col-sm-9">
+//   </dd>
+//   <p class="mb-1 text-start">{state.searchres.text}</p>
+// </dl> 
+
+
   );
   
 };

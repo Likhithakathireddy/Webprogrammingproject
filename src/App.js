@@ -12,12 +12,14 @@ import Homepage from "./components/homepage";
 import Otp from "./components/otp";
 import SearchE from "./components/search";
 import Insert from "./components/insert";
-
+import Summary from "./components/summary";
+import Footer from"./components/footer";
 function App() {
   return (
     <Router>
       <div className="App">
         <Header />
+        
         <Routes>
           <Route exact path="/" element={<SearchE />} />
           <Route path="/login" element={<Login />} />
@@ -29,7 +31,9 @@ function App() {
           <Route path="/home" element={<Homepage />} />
           <Route path="/otp" element={<Otp />} />
           <Route path="/insert" element={<Insert />} />
+          <Route path="/summary"element={<Summary/>}/>
         </Routes>
+        <Footer/>
       </div>
     </Router>
   );
