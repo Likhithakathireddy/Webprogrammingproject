@@ -12,6 +12,9 @@ export default class Login extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentDidMount(){
+    window.localStorage.clear();
+  }
   handleSubmit(e) {
     e.preventDefault();
     const { email, password } = this.state;

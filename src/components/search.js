@@ -292,6 +292,7 @@ const SearchItem = ({ etd, searchTerm }) => {
     </dl>
     </li>
     </div>
+    
   );
   
 };

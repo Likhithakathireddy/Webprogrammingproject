@@ -34,6 +34,14 @@ return(
   <dd class="col-sm-10">
   <p class="mb-1 text-left ">{state.searchres.university}</p>
   </dd>
+  <dt class="col-sm-2">degree</dt>
+  <dd class="col-sm-10">
+  <p class="mb-1 text-left ">{state.searchres.degree}</p>
+  </dd>
+  <dt class="col-sm-2">Program</dt>
+  <dd class="col-sm-10">
+  <p class="mb-1 text-left ">{state.searchres.program}</p>
+  </dd>
   <dt class="col-sm-2">Year Published</dt>
   <dd class="col-sm-10">
   <p class="mb-1 text-left ">{state.searchres.year}</p>
