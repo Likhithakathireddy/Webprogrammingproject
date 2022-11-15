@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./css/login.css";
+import swal from 'sweetalert';
 
 export default class Login extends Component {
   constructor(props) {
@@ -32,18 +33,29 @@ export default class Login extends Component {
       .then((data) => {
         console.log(data, "userRegister");
         if (data.status == "ok") {
-          alert("Enter OTP to login successfully");
+          swal({
+            title: "Login",
+            text: "Password is incorrect !",
+            icon: "success",
+          });
+          // alert("Enter OTP to login successfully");
           window.localStorage.setItem("email", email);
 
           window.location.href = "./otp";
         } else {
-          alert("User Not Found");
+          swal({
+            title: "Login",
+            text: "Password is incorrect !",
+            icon: "error",
+            button: "Retry",
+          });
+          // alert("User Not Found");
         }
       });
   }
   render() {
     return (
-      <div class="container">
+      <div class="container p-5 mb-5">
         <div class="row">
           <div class="col-md-5 mx-auto">
             <div class="myform ">
@@ -51,6 +63,7 @@ export default class Login extends Component {
                 <div class="col-md-12 text-center">
                   <h5>Login</h5>
                 </div>
+               
               </div>
               <form
                 onSubmit={(e) => {

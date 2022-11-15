@@ -41,6 +41,9 @@ export default class SearchE extends Component {
     this.pagination = this.pagination.bind(this);
   }
   componentDidMount() {
+    
+
+
     fetch("http://localhost:5000/userData", {
       method: "POST",
       crossDomain: true,
@@ -108,26 +111,13 @@ export default class SearchE extends Component {
   }
 
 
-  // handleCurrentPageItems(currentPageItems) {
-  //   this.setState({
-  //     currentPageItems,
-  //   });
 
-  //   this.setState((prev) => ({ ...prev, activePage: pageNumber }));
-  // }
 
   pagination(number) {
     this.setState({
       active: number,
     });
-    // axios
-    //   .get(
-    //     "https://rickandmortyapi.com/api/episode/" +
-    //       totalEpis.slice(indOfFirstEpi, indOfLastEpi)
-    //   )
-    //   .then(data => {
-    //     setEpi(data.data);
-    //   });
+
   }
 
   render() {
@@ -140,7 +130,7 @@ export default class SearchE extends Component {
       (active - 1) * numOfETDSperPage + numOfETDSperPage
     );
 
-    console.log({ etds, currentPageItems, active });
+    // console.log({ etds, currentPageItems, active });
     for (let number = 1; number <= Math.ceil(etds.length / numOfETDSperPage); number++) {
       pages.push(
         <Pagination.Item
@@ -153,10 +143,11 @@ export default class SearchE extends Component {
       );
     }
 
+    var s_title = window.localStorage.getItem("title"); 
     return (
       <div class="container">
-        <div class="mb-5 row">
-          <div class="col-md-9 mx-auto">
+        <div class=" row">
+          <div class="col-md-6 mx-auto">
             <div class="myform col-md-12 mt-3">
               <div class="logo mb-3">
                 <div class="text-center">
@@ -174,12 +165,13 @@ export default class SearchE extends Component {
                   <input
                     class="form-control"
                     type="text"
-                    placeholder="What are you looking for?"
+                    //placeholder="What are you looking for?"
                     onChange={(e) => {
                       this.setState({ searchTerm: e.target.value });
                     }}
                     autoComplete="on"
                     tabIndex="0"
+                    //value = {s_title}
                   />
                 </div>
                 <div class="text-center ms-3 d-flex align-items-center col-md-2">
@@ -196,6 +188,7 @@ export default class SearchE extends Component {
                   </p>
                 </div>
               </div>
+              {localStorage.getItem("token") ? (
               <div class="d-flex justify-content-center">
                 <div class="text-center">
                   <a
@@ -205,17 +198,24 @@ export default class SearchE extends Component {
                     value="Cancel"
                     tabIndex="0"
                   >
-                    Insert Entries
+                    Insert ETD
                   </a>
                   <p></p>
                 </div>
               </div>
+              ):(
+                <div></div>
+              )}
+
+
               {/* </form> */}
             </div>
           </div>
         </div>
-        <p class="fw-bold">The total number of search items {this.state.count} </p>
-        <div class="container">
+        
+        <div class="container  mt-3 mb-5">
+          
+        <p class="fw-bold">The total number of search items {this.state.count} for {s_title} </p>
           <ul class="list-group">
             {currentPageItems?.map((etd) => (
               <SearchItem etd={etd} searchTerm={this.state.searchTerm} />
@@ -292,34 +292,6 @@ const SearchItem = ({ etd, searchTerm }) => {
     </dl>
     </li>
     </div>
-
-
-// <div class="container">
-// <dl class="row">
-//   <dt class="mb-1 text-center text-uppercase">{state.searchres.title}</dt>
-
-//   <dt class="col-sm-3">Author(s)</dt>
-//   <dd class="col-sm-9"> 
-//    <p class="mb-1 text-center"> {state.searchres.author}</p>
-//    </dd>
-
-//   <dt class="col-sm-3">University</dt>
-//   <dd class="col-sm-9">
-//   <p class="mb-1 text-center ">{state.searchres.university}</p>
-//   </dd>
-
-//   <dt class="col-sm-3">Year Published</dt>
-//   <dd class="col-sm-9">
-//   <p class="mb-1 text-center ">{state.searchres.year}</p>
-//   </dd>
-
-//   <dt class="mb-1 text-center">Abstract</dt>
-//   <dd class="col-sm-9">
-//   </dd>
-//   <p class="mb-1 text-start">{state.searchres.text}</p>
-// </dl> 
-
-
   );
   
 };

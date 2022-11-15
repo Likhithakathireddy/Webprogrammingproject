@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import swal from "sweetalert"
 // import axios from "axios";
 // import "./css/login.css"
 
@@ -6,6 +7,22 @@ export default class InsertETD extends Component {
   constructor(props) {
     super(props);
     this.handleClick = this.handleClick.bind(this);
+  }
+  componentDidMount() {
+    fetch("http://localhost:5000/count", {
+      method: "GET",
+      crossDomain: true,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data.count, "count");
+        window.localStorage.setItem("count", data.count);
+      });
   }
   // handleSubmit() {
   //   const {
@@ -114,11 +131,24 @@ export default class InsertETD extends Component {
     }).then((res) => {
     console.log(res);
     if (res.status === 200) {
-      alert("Inserted Successfully") ;
+      swal({
+        title: "Good job!",
+        text: "Unable to upload file,try again after some time",
+        icon: "success",
+        button:"ok"
+      });
+      // alert("Inserted Successfully") ;
       window.localStorage.setItem("count",etd_file_id);
       window.open("./")
-      }else{
-        alert("Inserted Failed") 
+      }else
+      {
+        swal({
+        title: "Good job!",
+        text: "Unable to upload file,try again after some time",
+        icon: "error",
+        button:"Retry",
+      });
+        // alert("Inserted Failed") 
       }});
     }
 
@@ -128,7 +158,7 @@ export default class InsertETD extends Component {
         <div class="row">
           <div class="col-md-5 mx-auto">
             <div id="first">
-              <div class="myform form ">
+              <div class="myform  ">
                 <div class="logo mb-3">
                   <div class="col-md-12">
                     <h1>Insert</h1>
@@ -142,8 +172,9 @@ export default class InsertETD extends Component {
                       className="form-control"
                       onChange={(e) =>
                         this.setState({ advisor: e.target.value })
-                      }
                       
+                      }
+                      required
                     />
                   </div>
                   <div class="form-group">
@@ -212,7 +243,7 @@ export default class InsertETD extends Component {
                       type="text"
                       className="form-control"
                       onChange={(e) =>
-                        this.setState({ abstract: e.target.value })
+                        this.setState({ text: e.target.value })
                       }
                       
                     />

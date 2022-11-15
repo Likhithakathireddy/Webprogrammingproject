@@ -42,7 +42,7 @@ return(
   <dd class="col-sm-2">
   </dd>
   <p class="mb-1 text-start">{state.searchres.text}</p>
-  <dt class="mb-3 btn-btn-link"><a href={`http://localhost:5000/fileInfo/${state.searchres.etd_file_id}.pdf`} target="_blank" >View Document</a></dt>
+  <dt class="mb-3 btn-btn-link"><a href={`http://localhost:5000/fileInfo/${state.searchres.pdf}`} target="_blank" >View Document</a></dt>
   <div class="form-group col-md-3">
               {/* <button type="submit" href="/searchengine" class="btn btn-primary rounded-pill btn-block shadow-sm">Back to results</button> */}
               <Link to={"/"}>

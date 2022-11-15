@@ -50,13 +50,13 @@ export default class signup extends Component{
    }
     render(){
         return(
-            <div class="container">
+            <div class="container p-3 mb-5">
             <div class="row">
                 <div class="col-md-5 mx-auto">
                 <div id="first">
-                    <div class="myform form ">
+                    <div class="myform ">
                          <div class="logo mb-3">
-                             <div class="col-md-12 text-center">
+                             <div class="text-center mb-3">
                                 <h1>Signup</h1>
                              </div>
                         </div>
@@ -81,8 +81,8 @@ export default class signup extends Component{
                               <label >Password</label>
                               <input type="password" name="password" className="form-control" placeholder="Enter Password" onChange={(e) => this.setState({password: e.target.value })} required/>
                            </div>
-                           <div class="col-md-12 text-center mb-1">
-                              <button type="submit" className=" btn-btn-primary" onClick={this.handleSubmit}>SignUp</button>
+                           <div class="col-md-12 text-center mt-3">
+                              <button type="submit" className=" btn btn-block mybtn btn-primary tx-tfm" onClick={this.handleSubmit}>SignUp</button>
                            </div>
                            <div class="col-md-12 ">
                               <div class="form-group">

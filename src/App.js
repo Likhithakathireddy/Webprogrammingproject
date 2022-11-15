@@ -13,7 +13,7 @@ import Otp from "./components/otp";
 import SearchE from "./components/search";
 import Insert from "./components/insert";
 import Summary from "./components/summary";
-import Footer from"./components/footer";
+// import Footer from"./components/footer";
 function App() {
   return (
     <Router>
@@ -33,7 +33,7 @@ function App() {
           <Route path="/insert" element={<Insert />} />
           <Route path="/summary"element={<Summary/>}/>
         </Routes>
-        <Footer/>
+        {/* <Footer/> */}
       </div>
     </Router>
   );

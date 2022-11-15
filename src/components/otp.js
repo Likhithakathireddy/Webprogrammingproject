@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./css/login.css";
+import swal from 'sweetalert';
 
 export default class Otp extends Component {
   constructor(props) {
@@ -30,12 +31,21 @@ export default class Otp extends Component {
       .then((data) => {
         console.log(data, "userRegister");
         if (data.status == "ok") {
-          alert("login successful");
+          swal({
+            title: "Good job!",
+            text: "enter the home page",
+            icon: "success",
+          });
           window.localStorage.setItem("token", data.data);
 
           window.location.href = "/";
         } else {
-          alert("User Not exists");
+          swal({
+            title: "Try again ",
+            text: "Enter otp again ",
+            icon: "error",
+            button:"Retry",
+          });
         }
       });
   }

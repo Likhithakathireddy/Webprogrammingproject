@@ -3,14 +3,14 @@ import "./css/footer.css"
 export default class footer extends Component {
   render() {
     return (
-      <footer class="site-footer bg-dark text-center text-white">
+      <footer class="site-footer">
 
 
-        <div class="container fixed-bottom ">
+        <div class="container">
           <div class="row">
-            <div class="col-md-8 col-sm-6 col-xs-12">
+            <div class="col-md-8">
               <p class="copyright-text">
-                Copyright &copy; 2017 All Rights Reserved by
+                Copyright &copy; 2022 All Rights are Reserved
               </p>
             </div>
 
