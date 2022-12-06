@@ -8,7 +8,8 @@ app.use(cors());
 const bcrypt = require("bcryptjs");
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
-const multer = require("multer")
+const multer = require("multer");
+const request = require("request");
 const { 
     GridFsStorage
 } = require("multer-gridfs-storage");
@@ -45,6 +46,7 @@ app.post("/register", async (req, res) => {
   const { fname, lname, email,phonenumber, password } = req.body;
 
   const encryptedPassword = await bcrypt.hash(password, 10);
+  const key = await bcrypt.hash(email, 10);
   try {
     const oldUser = await User.findOne({ email });
 
@@ -57,6 +59,7 @@ app.post("/register", async (req, res) => {
       email,
       phonenumber,
       password: encryptedPassword,
+      key: key,
     });
     console.log("user created")
     console.log(User)
@@ -133,6 +136,9 @@ app.post("/login-otp", async (req, res) => {
 
 app.post("/userData", async (req, res) => {
   const { token } = req.body;
+  if(!token){
+    res.send({ status: "error", data: "No token found!" });
+  }
   try {
     const user = jwt.verify(token, JWT_SECRET);
     console.log(user);
@@ -326,7 +332,6 @@ app.get("/search", async (req, res) => {
   });
   console.log("response.data", response.data);
   res.json({
-
     results: response.data?.hits?.hits,
     count: response.data?.hits?.total?.value,
   });
@@ -411,3 +416,143 @@ const storage = new GridFsStorage({
     res.status(200)
       .send("File uploaded successfully");
   });
+
+  app.get("/count", async (req, res) => {
+    try {
+      const options = {
+        url: "http://localhost:9200/library/_count",
+      };
+      await request(options, function (err, data) {
+        res.send(data.body);
+        // console.log(data)
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  app.post("/insert", async (req, res) => {
+    const {
+      etd_file_id,
+      advisor,
+      author,
+      degree,
+      program,
+      title,
+      university,
+      year,
+      text,
+      pdf,
+    } = req.body;
+    wikifier_terms = [];
+    userKey = "koextlklicciiuokgsbpoupcxraqtz";
+    try {
+      // const options1 = {
+      //   url:"http://www.wikifier.org/annotate-article?text="+text+"&lang=en&userKey=koextlklicciiuokgsbpoupcxraqtz&pageRankSqThreshold=0.2&nTopDfValuesToIgnore=200&nWordsToIgnoreFromList=200&wikiDataClasses=false&wikiDataClassIds=false&support=false&ranges=false&minLinkFrequency=1&includeCosines=false&maxMentionEntropy=3&applyPageRankSqThreshold =true"
+  
+      // }
+      // await request.get(options1, function (err, data) {
+      //   //console.log("at request")
+      //   res.send(data);
+      //   //console.log(res.data);
+      //   //wikifier_terms =data;
+      // });
+  
+      // console.log("wiki",wikifier_terms);
+      // let filteredannotations = wikifier_terms.map((annotation) => ({
+      //   term : annotation.title,
+      //   url : annotation.url,
+      // }));
+      // wikifier_terms = filteredannotations;
+  
+      const options = {
+        url: "http://localhost:9200/library/_doc/" + etd_file_id,
+        body: {
+          etd_file_id: etd_file_id,
+          advisor: advisor,
+          author: author,
+          degree: degree,
+          program: program,
+          title: title,
+          university: university,
+          year: year,
+          text: text,
+          wikifier_terms: wikifier_terms,
+          pdf: pdf,
+        },
+        json: true,
+      };
+  
+      console.log(options);
+      await request.post(options, function (err, data) {
+        //console.log("at request")
+        res.send(data);
+        console.log(data);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  app.get("/digi_search", async (req, res) => {
+    const { title } = req.query;
+    const { key } = req.query;
+    if(!title) {
+      return res.send({
+        message: 'title not provided'
+      })
+    }
+    if(!key) {
+      return res.send({
+        message: 'key not provided'
+      })
+    }
+  try{
+    console.log({ title, key})
+    const keyUser = await User.findOne({ key });
+    if(keyUser){
+      const options = {
+        url: "http://localhost:9200/library/_search",
+        body: {
+          query: {
+            match: {
+              title: title,
+            },
+          },
+          size: 1000,
+        },
+        json: true,
+      };
+      console.log({ options });
+      await request(options, function (err, data) {
+        // console.log(data,err);
+        res.send(data.body.hits);
+      });
+    }else{
+      res.send({ status: "Invalid User key" })
+    }
+  
+  } catch (error) {}
+  
+  });
+
+  app.post("/generate", async (req, res) => {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.json({ error: "User Not found" });
+    }
+    const key = await bcrypt.hash(email, 10);
+    await User.updateOne(
+      {
+        email: user.email,
+      },
+      {
+        $set: {
+          key: key,
+        },
+      }
+    ); res.json({status: "ok"});
+  
+  });
+  

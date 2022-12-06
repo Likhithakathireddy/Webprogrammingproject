@@ -38,7 +38,7 @@ export default class Otp extends Component {
           });
           window.localStorage.setItem("token", data.data);
 
-          window.location.href = "/";
+          window.location.href = "/?search=";
         } else {
           swal({
             title: "Try again ",

@@ -59,7 +59,7 @@ export default class header extends Component {
                         aria-labelledby="navbarDropdown"
                       >
                         <li>
-                          <a class="dropdown-item" href="/home">
+                          <a class="dropdown-item" href="/">
                             Home
                           </a>
                         </li>
@@ -76,6 +76,11 @@ export default class header extends Component {
                         <li>
                           <a class="dropdown-item" href="/changepassword">
                             Change Password
+                          </a>
+                        </li>
+                        <li>
+                          <a class="dropdown-item" href="/keygenerator">
+                            API key Generator
                           </a>
                         </li>
                         <li>

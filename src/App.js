@@ -13,7 +13,8 @@ import Otp from "./components/otp";
 import SearchE from "./components/search";
 import Insert from "./components/insert";
 import Summary from "./components/summary";
-// import Footer from"./components/footer";
+import Footer from"./components/footer";
+import Key from "./components/keygenerator";
 function App() {
   return (
     <Router>
@@ -28,12 +29,12 @@ function App() {
           <Route path="/editprofile" element={<Editprofile />} />
           <Route path="/changepassword" element={<Changepassword />} />
           <Route path="/viewprofile" element={<Viewprofile />} />
-          <Route path="/home" element={<Homepage />} />
           <Route path="/otp" element={<Otp />} />
           <Route path="/insert" element={<Insert />} />
           <Route path="/summary"element={<Summary/>}/>
+          <Route path="/keygenerator"element={<Key/>}/>
         </Routes>
-        {/* <Footer/> */}
+        <Footer/>
       </div>
     </Router>
   );

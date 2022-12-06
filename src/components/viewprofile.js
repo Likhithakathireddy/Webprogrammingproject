@@ -47,6 +47,8 @@ export default class viewprofile extends Component {
                 <h3>{this.state.userData.email}</h3>
                 <label>Phone Number</label>
                 <h3>{this.state.userData.phonenumber}</h3>
+                {/* <label>API Key</label>
+                <h3>{this.state.userData.key}</h3> */}
               </div>
               <div class="col-md-12 text-center ">
                 <a

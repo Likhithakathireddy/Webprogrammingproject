@@ -8,6 +8,7 @@ const UserDetailsScehma = new mongoose.Schema(
     phonenumber : String,
     password: String,
     otp : String,
+    key: String,
   },
   {
     collection: "webapp",

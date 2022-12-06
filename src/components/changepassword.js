@@ -41,7 +41,7 @@ export default class changepassword extends Component {
           console.log(data, "userRegister");
           if (data.status == "ok") {
             alert("");
-            window.location.href = "./home";
+            window.location.href = "./";
           } else if (data.status == "error2") {
             alert("Current Password is wrong");
           } else {
